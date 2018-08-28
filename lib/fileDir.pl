@@ -31,6 +31,7 @@ require 'forkProc.pl';
 
 use strict;
 
+my $tmpdir = '/tmp';
 
 # copies a file
 # returns:
@@ -42,30 +43,35 @@ sub copyFile
     my $source = shift;
     my $target = shift;
     my $prLog = shift;
-
-    local *SOURCE;
-    local *TARGET;
-    unless (sysopen(SOURCE, $source, O_RDONLY))
-    {
-	return 0;
+    
+    $prLog->print('-kind' => 'D',
+            '-str' =>
+            ["runcopy on $source $target"]);
+    
+    my $gnuCopy = 'cp';
+    my (@gnuCopyParSpecial) = ('--reflink=always', '-v');
+    
+    my $cp = forkProc->new('-exec' => $gnuCopy,
+                            '-param' => [@gnuCopyParSpecial,
+                                    "$source",
+                                    "$target"],
+                            '-outRandom' => "$tmpdir/gnucp-",
+                            '-prLog' => $prLog);
+    $cp->wait();
+    my $out = $cp->getSTDOUT();
+    $prLog->print('-kind' => 'D',
+            '-str' =>
+            ["STDOUT of <$gnuCopy @gnuCopyParSpecial <$source> " .
+            "<$target>:", @$out])
+    if (@$out > 0);
+    $out = $cp->getSTDERR();
+    if (@$out > 0) {
+    $prLog->print('-kind' => 'E',
+            '-str' =>
+            ["STDERR of <$gnuCopy @gnuCopyParSpecial <$source>" .
+            "<$target>:", @$out]);
+            return 1;
     }
-    unless (sysopen(TARGET, $target, O_CREAT | O_WRONLY))
-    {
-	return 0;
-    }
-    my $buffer;
-    while (sysread(SOURCE, $buffer, 10*1024**2))
-    {
-	unless (syswrite(TARGET, $buffer))
-	{
-	    $prLog->print('-kind' => 'E',
-			  '-str' => [$!]);
-	    return 0;
-	}
-    }
-
-    close(TARGET);
-    close(SOURCE);
 
     return 1;
 }
@@ -99,10 +105,13 @@ sub copySymLink
 sub copyDir
 {
     my ($from, $to, $tmp, $prLog, $ignoreError) = (@_);
+    
+    my $gnuCopy = 'cp';
+    my (@gnuCopyParSpecial) = ('-r', '--reflink=always', '-v');
 
-    my $cp = forkProc->new('-exec' => 'cp',
+    my $cp = forkProc->new('-exec' => $gnuCopy,
 			   '-param' =>
-			   ['-r', "$from", "$to"],
+			   [@gnuCopyParSpecial, "$from", "$to"],
 			   '-outRandom' => $tmp,
 			   '-prLog' => $prLog);
     $cp->wait();
@@ -111,7 +120,7 @@ sub copyDir
     {
 	$prLog->print('-kind' => 'W',
 		      '-str' =>
-		      ["copying of <$from> to <$to> reported:",
+		      ["STDOUT of <$gnuCopy @gnuCopyParSpecial <$from> <$to>> reported:",
 		       @$out]);
     }
     $out = $cp->getSTDERR();
@@ -119,7 +128,7 @@ sub copyDir
     {
 	$prLog->print('-kind' => 'E',
 		      '-str' =>
-		      ["copying (with 'cp -r') of <$from> to <$to> reported:",
+		      ["STDERR of <$gnuCopy @gnuCopyParSpecial <$from> <$to>> reported:",
 		       @$out]);
 	exit 1 unless $ignoreError;
     }

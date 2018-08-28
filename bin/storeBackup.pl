@@ -6737,11 +6737,12 @@ beginMainLoopNormalOperation:;
 		$wrLateLink->print("compress $md5\n$existingFile\n");
 	    }
 
-            if ($size <= $main::minCopyWithFork) # direkt kopieren (ohne fork)
+            #if ($size <= $main::minCopyWithFork) # direkt kopieren (ohne fork)
+            if (1) # direkt kopieren (ohne fork)
             {
 #print "-17-\n";
                 $prLog->print('-kind' => 'D',
-                              '-str' => ["copy $dir/$file $targetDir/$file"])
+                              '-str' => ["copy direct $dir/$file $targetDir/$file"])
                     if ($debugMode >= 2);
 
                 unless (&::copyFile("$dir/$file", "$targetDir/$file", $prLog))
@@ -6819,7 +6820,7 @@ beginMainLoopNormalOperation:;
             {
                 $prLog->print('-kind' => 'D',
                               '-str' =>
-                              ["copy $dir/$file $targetDir/$file"])
+                              ["copy with fork $dir/$file $targetDir/$file"])
                     if ($debugMode >= 2);
 
 		my $tmpMD5File = &::uniqFileName("$tmpdir/storeBackup-md5.");

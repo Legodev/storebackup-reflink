@@ -32,6 +32,30 @@ use Digest::MD5 qw(md5_hex);
 
 my ($fileToRead, $fileToSave, $md5RetFile) = @ARGV;
 
+my $tmpdir = '/tmp';
+my $gnuCopy = 'cp';
+my (@gnuCopyParSpecial) = ('--reflink=always', '-v');
+
+my $cp = forkProc->new('-exec' => $gnuCopy,
+                        '-param' => [@gnuCopyParSpecial,
+                                "$fileToRead",
+                                "$fileToSave"],
+                        '-outRandom' => "$tmpdir/gnucp-",
+                        '-prLog' => $prLog);
+print "RUN of <$gnuCopy @gnuCopyParSpecial <$fileToRead> <$fileToSave>:";
+$cp->wait();
+my $out = $cp->getSTDOUT();
+        print STDERR "STDOUT of <$gnuCopy @gnuCopyParSpecial <$fileToRead> " .
+        "<$fileToSave>:", @$out"\n";
+    if (@$out > 0);
+
+$out = $cp->getSTDERR();
+if (@$out > 0) {
+    print STDERR "STDERR of <$gnuCopy @gnuCopyParSpecial <$fileToRead>" .
+        "<$fileToSave>:", @$out"\n";
+        exit 1;
+}
+
 
 unless (sysopen(IN, $fileToRead, O_RDONLY))
 {
@@ -39,23 +63,14 @@ unless (sysopen(IN, $fileToRead, O_RDONLY))
     exit 1;
 }
 
-unless (sysopen(OUT, $fileToSave, O_CREAT|O_WRONLY, 0700))
-{
-    print STDERR "cannot open <$fileToSave> (", __FILE__, " ", __LINE__,  ")\n";
-    exit 2;
-}
-
 my $md5 = Digest::MD5->new();
 my ($buffer, $n, $size);
 $size = 0;
 while ($n = sysread(IN, $buffer, 4096))
 {
-    print STDERR "cannot write to <$fileToSave>\n"
-	unless syswrite OUT, $buffer;
     $md5->add($buffer);
     $size += $n;
 }
-close(OUT);
 close(IN);
 
 open(MD5, '>', $md5RetFile)
