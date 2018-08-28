@@ -1,0 +1,1199 @@
+Copyright (c) 2002-2013 by Heinz-Josef Claes (see README)
+Published under the GNU General Public License v3 or any later version
+
+
+----------------------------
+version 1.0	2002.05.07
+	first public release
+
+----------------------------
+version 1.1      2002.05.18
+	statistical output 'over all files/sec' was unclear
+	changed to:
+	over all files/sec (real time) =
+	 over all files/sec (CPU time) =
+	                     CPU usage =
+
+	versions are now (overall checksum):
+	storeBackup.pl -V         => 1.3461
+	storeBackupls.pl -V       => 1.2583
+	storeBackupVersions.pl -V => 1.4313
+	storeBackupRecover.pl -V  => 1.4992
+
+----------------------------
+version 1.2      2002.05.19
+	storeBackup.pl:
+	with option --exceptDirs you can also use wildcards
+	added option --contExceptDirsErr
+
+	storeBackupRecover.pl:
+	if you extract a directory (eg. abc) and there exists another
+	directory with a name with the same beginning (eg. abcd), this
+	one will also be extracted -> corrected
+
+	versions are now (overall checksum):
+	storeBackup.pl -V         => 1.3471
+	storeBackupls.pl -V       => 1.2583
+	storeBackupVersions.pl -V => 1.4313
+	storeBackupRecover.pl -V  => 1.5145
+
+----------------------------
+version 1.3      2002.05.22
+	all programs:
+	the usage of the programms with sensless list parameters
+	(like *.h) was ignored -- now an error message is produced
+
+	storeBackupVersions.pl:
+	improved performance, checks same inodes before calculating
+	md5 sums
+
+	storeBackup.pl:
+	when the time for backup was < 1 sec, a division by zero could happen
+	(thanks to Joerg Paysen for the report)
+	added --keepMinNumberAfterLastOfDay (instead of replacing --keepMinNumber)
+
+	versions are now (overall checksum):
+	storeBackup.pl -V         => 1.3491
+	storeBackupls.pl -V       => 1.2583
+	storeBackupVersions.pl -V => 1.4483
+	storeBackupRecover.pl -V  => 1.5159
+
+----------------------------
+version 1.4      2002.05.27
+	all programs:
+	support recovering of hard links in the source tree of storeBackup.pl
+
+	storeBackupRecover.pl
+	fixed some little bugs introduced in version 1.2
+
+	storeBackupConvertBackup.pl
+	new program to convert old backup directories (target) to the new
+	format of .md5CheckSums[.bz2]
+	YOU HAVE TO CALL IT, IF YOU WANT TO USE VERSION 1.4 WITH OLD BACKUPS!
+
+	versions are now (overall checksum):
+	storeBackup.pl -V              => 1.3568
+	storeBackupls.pl -V            => 1.2583
+	storeBackupVersions.pl -V      => 1.4775
+	storeBackupRecover.pl -V       => 1.4073
+	storeBackupConvertBackup.pl -V => 1.9776
+
+----------------------------
+version 1.5      2002.05.28
+	storeBackup.pl
+	better statistics about freed/used space on disk
+
+	versions are now (overall checksum):
+	storeBackup.pl -V              => 1.3606
+	storeBackupls.pl -V            => 1.2583
+	storeBackupVersions.pl -V      => 1.4775
+	storeBackupRecover.pl -V       => 1.4073
+	storeBackupConvertBackup.pl -V => 1.9776
+
+----------------------------
+version 1.6      2002.06.10
+	storeBackupVersions.pl
+	added flags:
+	--showAll (same as all below)
+	--size (shows size of found files)
+	--uid (show also uid of source file)
+	--gid (show also gid of source file)
+	--mode (show also mode of source file)
+	--ctime (show also creation time of source file)
+	--mtime (show also modify time of source file)
+	storeBackup.pl
+	added weekday to INFO output in log file when deleting old dir
+	via parameter --keepOnlyLastOfDay
+	ROADMAP is actualized
+
+	versions are now (overall checksum):
+	storeBackup.pl -V              => 1.3617
+	storeBackupls.pl -V            => 1.2583
+	storeBackupVersions.pl -V      => 1.4401
+	storeBackupRecover.pl -V       => 1.4073
+	storeBackupConvertBackup.pl -V => 1.9776
+
+----------------------------
+version 1.7      2002.07.2
+	storeBackup.pl
+	added flag --ignoreReadError
+	added flags --file, --generate, --print: you can now use a
+	configuration file instead of putting all in command line options
+
+	versions are now (overall checksum):
+	storeBackup.pl -V              => 1.2871
+	storeBackupls.pl -V            => 1.2972
+	storeBackupVersions.pl -V      => 1.3795
+	storeBackupRecover.pl -V       => 1.3280
+	storeBackupConvertBackup.pl -V => 2.0308
+
+----------------------------
+version 1.8      2002.08.17
+	storeBackupConvertBackup.pl
+	updated program to convert old backup directories (target) to the new
+	format of .md5CheckSums[.bz2] and .md5CheckSums.info
+	YOU HAVE TO CALL IT, IF YOU WANT TO USE VERSION 1.7 WITH OLD BACKUPS!
+	see file bin/_ATTENTION_ for detailed information
+
+	storeBackupls.pl
+	added option -v for verbose information
+
+	storeBackup.pl
+	- correction of minor errors
+	- added list parameter(s) otherBackupDirs
+	  allows you to hard link to older trees from the same backup
+	  allows you to hard link to backup trees of another backup series
+	  This gives you the possiblity to share data via hard link between
+	  independent backups. See README file for more information (search
+	  for 'otherBackupDirs').
+
+	storeBackupVersions.pl + storeBackupRecover.pl
+	- compatible with new file format
+
+----------------------------
+version 1.8.1    2002.08.19
+	Error fixing:
+	storeBackup.pl
+	- didn't build dbm(filename) correctly when first backup with
+	  otherBackupDirs
+	- pattern for recognizing of relative part of backup path did not
+	  work with some strange path names, pattern replaced with substr
+	  and length
+	- if the directory to backup was empty, then no .md5CheckSum.bz2
+	  was created
+
+----------------------------
+version 1.9      2002.08.26
+	storeBackup.pl
+	- new option --chmodMD5File
+	- total internal replacement for handling --onlyMD5Check
+	  is now handled in ::buildDBMs -> nearly as fast as without
+	  --onlyMD5Check
+	- new option --printDepth
+	- options --onlyMD5Check and --onlyMD5CheckOn are now only needed
+	  if hard linking with other backups (see otherBackupDirs)
+
+----------------------------
+version 1.9.1    2002.08.31
+	storeBackup.pl
+	- performance improvement when copying small files (< 100KB)
+	- error fix: --onlyMD5Check was not as fast as described in v1.9
+	  du to an error when making the package (but fortunately the
+	  correct version was in my backup)
+
+	versions are now (overall checksum):
+	storeBackup.pl -V              => 1.3138
+	storeBackupls.pl -V            => 1.2626
+	storeBackupVersions.pl -V      => 1.4091
+	storeBackupRecover.pl -V       => 1.3454
+	storeBackupConvertBackup.pl -V => 2.0844
+
+----------------------------
+version 1.10	 2002.10.20
+	storeBackup.pl
+	- options --onlyMD5Check and --onlyMD5CheckOn are now obsolete
+	  storeBackup decides itself, if the functionality is needed
+	- you do not have to worry when using 'otherBackupDirs' if it's not
+	  yet ready. this is recognized automatically
+	- added options --withUserGroupStat --userGroupStatFile
+
+	versions are now (overall checksum):
+	storeBackup.pl -V              => 1.3325
+	storeBackupls.pl -V            => 1.2966
+	storeBackupVersions.pl -V      => 1.4295
+	storeBackupRecover.pl -V       => 1.3709
+	storeBackupConvertBackup.pl -V => 2.0844
+
+----------------------------
+version 1.10.1	 2002.10.27
+	storeBackup.pl + storeBackupRecover.pl
+	- replaced syscall lchown with fork-exec chown
+	  because of error messages with perl 5.8 (SuSE 8.1)
+
+	versions are now (overall checksum):
+	storeBackup.pl -V              => 1.3334
+	storeBackupls.pl -V            => 1.2966
+	storeBackupVersions.pl -V      => 1.4295
+	storeBackupRecover.pl -V       => 1.3722
+	storeBackupConvertBackup.pl -V => 2.0844
+
+----------------------------
+version 1.11	 2003.03.05
+	storeBackup.pl
+	- --exceptSuffix: removed '.bmp', added '.pgp'
+	- changed default of parameter --logFile
+	- new parameters:
+	  --plusLogStdout, --saveLogs, --compressWith,
+	  --logInBackupDir, --compressLogInBackupDir,
+	  --logInBackupDirFileName
+	- if called with parameter -f ... --print then
+	  evaluation of wildcards is performed
+	- correction of litte faults
+
+	versions are now (overall checksum):
+	storeBackup.pl -V              => 1.3435
+	storeBackupls.pl -V            => 1.3152
+	storeBackupVersions.pl -V      => 1.4406
+	storeBackupRecover.pl -V       => 1.3862
+	storeBackupConvertBackup.pl -V => 2.0844
+
+----------------------------
+version 1.12	 2003.04.16
+	storeBackup.pl
+	- exception list was not taken into account when checking
+	  collisions from options of -t and -s
+	- added parameter --copyBWLimit (uses rsync for copying)
+	- in some cases internal linkage of duplicated files did not
+	  working
+	- added parameter --postcommand
+	- added statistical output for used length of queues
+
+	versions are now (overall checksum):
+	storeBackup.pl -V              => 1.3537
+	storeBackupls.pl -V            => 1.3322
+	storeBackupVersions.pl -V      => 1.4518
+	storeBackupRecover.pl -V       => 1.4001
+	storeBackupConvertBackup.pl -V => 2.0844
+	llt -V                         => 1.4294
+	multitail.pl -V                => 1.4555
+
+----------------------------
+version 1.12.1	 2003.05.01
+	storeBackup.pl
+	- When copying files < 100 KB into the backup, owner and permissions
+	  were not set correctly. When hard linking in the next backup, this
+	  was corrected. -> Error fixed
+	- When problems with forking cp or the compression program occured,
+	  this was not handled correctly.
+
+	versions are now (overall checksum):
+	storeBackup.pl -V              => 1.3545
+	storeBackupls.pl -V            => 1.3322
+	storeBackupVersions.pl -V      => 1.4518
+	storeBackupRecover.pl -V       => 1.4001
+	storeBackupConvertBackup.pl -V => 2.0844
+	llt -V                         => 1.4294
+	multitail.pl -V                => 1.4555
+
+----------------------------
+version 1.12.2	 2003.05.18
+	storeBackup.pl
+	- When copying files < 100 KB into the backup, sometimes the
+	  storeBackup internal scheduler slows down the backup -> fixed
+	- Files with size zero where not handled correctly -> fixed
+	- Some complicated if cases where not covered -> fixed
+	- better internal documentation
+	- granularity of the internal scheduler is now finer, prog should be
+	  about 5% faster
+	- added /etc/cron.daily/storebackup from Arthur Korn for Debian users
+
+versions are now (overall checksum):
+	storeBackup.pl -V              => 1.3554
+	storeBackupls.pl -V            => 1.3322
+	storeBackupVersions.pl -V      => 1.4518
+	storeBackupRecover.pl -V       => 1.4001
+	storeBackupConvertBackup.pl -V => 2.0844
+	llt -V                         => 1.4294
+	multitail.pl -V                => 1.4555
+
+----------------------------
+version 1.13	 2003.07.28
+        - BSD is now supported
+	storeBackup.pl
+	- Many new options for managing old backups. New/changed parameters:
+	  --noDelete changed to --doNotDelete
+	  --keepAll can now handle the 'archive flag'
+	  --keepWeekDay can now handle the 'archive flag'
+	  --keepFirstOfYear is new
+	  --keepLastOfYear is new
+	  --keepFirstOfMonth is new
+	  --keepLastOfMonth is new
+	  --firstDayOfWeek is new
+	  --keepFirstOfWeek is new
+	  --keepLastOfWeek is new
+	  --keepOnlyLastOfDay changed to --keepDuplicate
+	  --keepMaxNumber is new
+	  --keepMinNumberAfterLastOfDay has gone
+	- Correct error message if you do not have permission to read a
+	  file (not being root).
+	- Option --exceptDirs only worked correct when storeBackup was
+	  started in the source directory (sourceDir)
+	storeBackupDel.pl
+	- new programm to only delete old backups with the flags described
+	  above at storeBackup.pl
+
+versions are now (overall checksum):
+	storeBackup.pl -V              => 1.3664
+	storeBackupls.pl -V            => 1.3509
+	storeBackupVersions.pl -V      => 1.3765
+	storeBackupRecover.pl -V       => 1.4154
+	storeBackupConvertBackup.pl -V => 2.0844
+	storeBackupDel.pl -V           => 1.3606
+	llt -V                         => 1.2222
+	multitail.pl -V                => 1.4555
+
+----------------------------
+version 1.14	 2003.08.26
+	storeBackup.pl
+	- most parts of the statistical output were twice when one ore more
+	  old backups were deleted
+	- now runs on AIX
+	- checks, if targetDir has write permissions (better error message)
+	- replace statistic message:
+	  additional used space
+	  with
+	  add. used space in files
+	storeBackupDel.pl
+	- can use the config file of storeBackup.pl to operate
+	storeBackupls.pl
+	- can use the config file of storeBackup.pl to show analysis of
+	  livetime of old backups
+
+versions are now (overall checksum):
+	storeBackup.pl -V              => 1.2993
+	storeBackupls.pl -V            => 1.2102
+	storeBackupVersions.pl -V      => 1.2949
+	storeBackupRecover.pl -V       => 1.3134
+	storeBackupConvertBackup.pl -V => 2.0844
+	storeBackupDel.pl -V           => 1.2795
+	llt -V                         => 1.2222
+	multitail.pl -V                => 1.4555
+
+----------------------------
+version 1.14.1	 2003.10.25
+	storeBackup.pl (fixed)
+	- in some cases, setuid and setgid were not stored in the backup
+	- depending on the kernel version, permissions in the backup were
+	  not set correctly
+	storeBackupRecover.pl (fixed)
+	- depending on the kernel version, permissions in the backup were
+	  not set correctly
+
+versions are now (overall checksum):
+	storeBackup.pl -V              => 1.3001
+	storeBackupls.pl -V            => 1.2102
+	storeBackupVersions.pl -V      => 1.2949
+	storeBackupRecover.pl -V       => 1.3147
+	storeBackupConvertBackup.pl -V => 2.0844
+	storeBackupDel.pl -V           => 1.2795
+	llt -V                         => 1.2222
+	multitail.pl -V                => 1.4555
+
+----------------------------
+version 1.15    2004.02.06
+	storeBackup.pl
+	- otherBackupDirs now understands 'from-to' and 'all'
+	--includeDirs is new
+	--exceptPattern is new
+	--includePattern is new
+	--resetAtime (in the source directory) is new
+	  - sets atime and mtime in the backup to the same values as in
+	    the source directory
+
+	deleting of old backups (storeBackup.pl, storeBackupls.pl,
+	                         storeBackupDel.pl)
+	- fixed bug with options --keepMinNumber and --keepMaxNumber
+	- set default value of --keepDuplicate to 7d
+	- result of checking old log files is now write to logfile
+	  inside of backup (if wanted)
+
+	storeBackupRecover.pl
+	- restores atime and mtime when restoring backups
+
+	llt
+	- output now in format yyyy.mm.dd, no longer in german format
+
+	configuration file syntax
+	- allows now the use of single quotes
+
+	storeBackupMount.pl
+	- pings server, mounts file systems, calls storeBackup and
+	  umounts filesystems
+
+versions are now (overall checksum):
+(these values have changed dramatically because I switched from cvs to svn)
+	storeBackup.pl -V              => 157.8243
+	storeBackupls.pl -V            => 96.8069
+	storeBackupVersions.pl -V      => 138.2092
+	storeBackupRecover.pl -V       => 171.4032
+	storeBackupConvertBackup.pl -V => 178.6868
+	storeBackupDel.pl -V           => 153.4117
+	storeBackupMount.pl -V         => 129.1638
+	llt -V                         => 103.7589
+	multitail.pl -V                => 62.3245
+
+----------------------------
+version 1.15.1   2004.02.08
+	storeBackup.pl
+	- fixed a bug when reading the config file
+	  (affecting exceptPattern, includePattern)
+	- fixed a bug when using 'sourceDir = /' and exceptPattern
+	  or includePattern
+
+versions are now (overall checksum):
+	storeBackup.pl -V              => 183.5295
+	storeBackupls.pl -V            => 143.9218
+	storeBackupVersions.pl -V      => 171.1896
+	storeBackupRecover.pl -V       => 212.6288
+	storeBackupConvertBackup.pl -V => 178.6868
+	storeBackupDel.pl -V           => 183.3940
+	storeBackupMount.pl -V         => 170.2637
+	llt -V                         => 104.0773
+	multitail.pl -V                => 116.9386
+
+----------------------------
+version 1.16      2004.02.25
+	storeBackup.pl
+	- added parameter --exceptTypes
+	- store data in dbm files with pack / unpack
+	- better handling if maximum number of hard links is exceeded
+	- precommand and postcommand now understand single quotes nested
+	  in double quotes in the commandline (like ...Pattern)
+	- storeBackup didn't store the uncompress command correctly since
+	  version 1.15. This means, that storeBackupRecover could not
+	  restore the original version. This is because of the missing
+	  option '-d' in file .md5CheckSums.info. Wrong version:
+	     uncompress=bzip2
+	  but must be
+	     uncompress=bzip2 -d
+	  Change this line with an editor or use the script correct.sh
+
+	storeBackupRecover.pl
+	- storeBackupConvertBackup.pl had a bug, so that storeBackupRecover
+	  did not work any more. storeBackupRecover is now able to
+	  handle converted backups (again).
+
+versions are now (overall checksum):
+	storeBackup.pl -V              => 183.9252
+	storeBackupls.pl -V            => 144.0733
+	storeBackupVersions.pl -V      => 171.5950
+	storeBackupRecover.pl -V       => 213.5498
+	storeBackupConvertBackup.pl -V => 178.6868
+	storeBackupDel.pl -V           => 183.7625
+	storeBackupMount.pl -V         => 170.9166
+	llt -V                         => 104.0773
+	multitail.pl -V                => 116.9386
+
+----------------------------
+version 1.16.1    2004.03.07
+	storeBackup.pl
+	- better explanations in the configuration file
+	  and for command line options
+	- better error messages
+	- option --print did not work for some values
+	- fixed a bug in the module for reading the
+	  configuration file with keepWeekday
+	- when printing to a log file and to stdout
+	  simultaneously, a possible error message with exit
+	  is now also printed to stdout
+	- option verbose now has the same effekt as debug=1
+
+versions are now (overall checksum):
+	storeBackup.pl -V              => 184.4928
+	storeBackupls.pl -V            => 144.6597
+	storeBackupVersions.pl -V      => 172.0055
+	storeBackupRecover.pl -V       => 214.0630
+	storeBackupConvertBackup.pl -V => 178.6868
+	storeBackupDel.pl -V           => 184.5203
+	storeBackupMount.pl -V         => 171.2973
+	llt -V                         => 104.0773
+	multitail.pl -V                => 117.4461
+
+----------------------------
+version 1.16.2    2004.04.04
+	storeBackup.pl
+	- exit status is now correct (0) when running successfully
+	- option --verbose now prints some additionally verbose messages
+	  it is not similar any more to --debug 1
+	- the log file written into the backup now contains the
+	  "delete old backupevaluation"
+	- unsupported file type didn't generate an error message
+	  instead, the blew up the backup -> corrected
+	- integer overrun in the statistical output when saving large
+	  amounts of data is corrected
+	storeBackup_du.pl added to the package
+versions are now (overall checksum):
+	storeBackup.pl -V              => 184.6565
+	storeBackupls.pl -V            => 144.2247
+	storeBackupVersions.pl -V      => 172.0004
+	storeBackupRecover.pl -V       => 214.0566
+	storeBackupConvertBackup.pl -V => 178.6868
+	storeBackupDel.pl -V           => 184.5157
+	storeBackupMount.pl -V         => 171.2909
+	llt -V                         => 104.0773
+	multitail.pl -V                => 116.9386
+
+----------------------------
+version 1.17      2004.09.04
+	storeBackup.pl
+	- reduced size of temporary berkeley db files
+	  this results in better caching (and therefore better performance
+	  for backups with many files)
+	- also print size of the berkely db files into the statistical output
+	- new option --unlockBeforeDel
+	- various little bug fixes (corrected comments and print outputs)
+	storeBackupMount.pl
+	- better exit status, distinguishes between errors in
+	  storeBackup und storeBackupMount
+versions are now (overall checksum):
+	storeBackup.pl -V              => 184.9850
+	storeBackupls.pl -V            => 144.6790
+	storeBackupVersions.pl -V      => 173.1101
+	storeBackupRecover.pl -V       => 214.4541
+	storeBackupConvertBackup.pl -V => 178.6868
+	storeBackupDel.pl -V           => 184.8048
+	storeBackupMount.pl -V         => 171.8483
+	storeBackup_du.pl -V           =>  73.0682
+	llt -V                         => 104.0773
+	multitail.pl -V                => 118.2667
+
+----------------------------
+version 1.18      2004.06.03
+	storeBackup.pl
+	- minor corrections to statistical output
+	- fixed a bug with options --includePattern and --exceptPattern:
+	  There had to be brackets around a logical expression.
+	storeBackupRecover.pl
+	- restoring of directories with a round bracket in the name did not
+	  work sometimes, fixed
+versions are now (overall checksum):
+	storeBackup.pl -V              => 185.0688
+	storeBackupls.pl -V            => 144.6790
+	storeBackupVersions.pl -V      => 173.1101
+	storeBackupRecover.pl -V       => 215.1446
+	storeBackupConvertBackup.pl -V => 178.6868
+	storeBackupDel.pl -V           => 184.8048
+	storeBackupMount.pl -V         => 171.8483
+	storeBackup_du.pl -V           =>  73.0682
+	llt -V                         => 104.0773
+	multitail.pl -V                => 118.2667
+
+----------------------------
+version 1.18.1    2004.06.08
+	storeBackup.pl
+	- fixed a silly bug which occured one did not use option progressReport
+versions are now (overall checksum):
+	storeBackup.pl -V              => 185.1527
+	storeBackupls.pl -V            => 144.6790
+	storeBackupVersions.pl -V      => 173.1101
+	storeBackupRecover.pl -V       => 215.1446
+	storeBackupConvertBackup.pl -V => 178.6868
+	storeBackupDel.pl -V           => 184.8048
+	storeBackupMount.pl -V         => 171.8483
+	storeBackup_du.pl -V           =>  73.0682
+	llt -V                         => 104.0773
+	multitail.pl -V                => 118.2667
+
+----------------------------
+version 1.18.2    2004.06.26
+	storeBackup.pl
+	- storeBackup calculated too much md5 sums, corrected
+	- storeBackup had a dependency with perl versions >= 5.8,
+	  now it does not depend on this new version any more
+versions are now (overall checksum):
+	storeBackup.pl -V              => 185.4812
+	storeBackupls.pl -V            => 145.1333
+	storeBackupVersions.pl -V      => 173.1101
+	storeBackupRecover.pl -V       => 215.5421
+	storeBackupConvertBackup.pl -V => 178.6868
+	storeBackupDel.pl -V           => 185.0938
+	storeBackupMount.pl -V         => 171.8483
+	storeBackup_du.pl -V           =>  73.0682
+	llt -V                         => 104.0773
+	multitail.pl -V                => 118.2667
+
+----------------------------
+version 1.18.3    2004.07.06
+	storeBackup.pl
+	- much better performance when used with exceptPattern or
+	  includePattern
+	storeBackupls.pl
+	- if used with option -f, default is to read the the location
+	  of the backup from the configuration file
+	  this default can be overwritten (if you have different mount
+	  points)
+versions are now (overall checksum):
+	storeBackup.pl -V              => 185.8650
+	storeBackupls.pl -V            => 173.5429
+	storeBackupVersions.pl -V      => 173.9271
+	storeBackupRecover.pl -V       => 216.1658
+	storeBackupConvertBackup.pl -V => 178.6868
+	storeBackupDel.pl -V           => 185.5475
+	storeBackupMount.pl -V         => 172.4720
+	storeBackup_du.pl -V           =>  73.0682
+	llt -V                         => 104.0773
+	multitail.pl -V                => 118.2667
+
+----------------------------
+version 1.18.4    2004.07.11
+	storeBackup.pl
+	- (much) better performance because of reducing the number of
+	  md5sum calls when using otherBackupDirs
+	- the very first backup of a backup series did not hard link
+	  to another backup series defined with otherBackupDirs
+	- some temporary files were not deleted
+versions are now (overall checksum):
+	storeBackup.pl -V              => 186.1958
+	storeBackupls.pl -V            => 173.9472
+	storeBackupVersions.pl -V      => 174.1391
+	storeBackupRecover.pl -V       => 216.4308
+	storeBackupConvertBackup.pl -V => 178.6868
+	storeBackupDel.pl -V           => 185.7402
+	storeBackupMount.pl -V         => 172.4720
+	storeBackup_du.pl -V           =>  73.0682
+	llt -V                         => 104.0773
+	multitail.pl -V                => 118.2667
+
+----------------------------
+version 1.19	2005.08.05
+	storeBackup.pl
+	- in some rare cases filenames were stored with a leading slash
+	  in .md5CheckSum. I could not be simulated by me. But the bug
+	  should be fixed.
+	- some fixes in handling of directory paths
+	- uid and gid were not set correctly for symbolic links in the
+	  backups (in the files, not the description of the files)
+	- formatting of file sizes with human readable number (eg. 3.5k)
+	  didn't work properly in all cases
+	- check for symbolic links before opening temporary files
+	- set permissions of backup root directory to 0755
+	  (independent of umask)
+	storeBackupRecover.pl
+	- could not restore directory '.' with option -r
+	- uid and gid were not set correctly for symbolic links when
+	  restoring, instead they were changed in the file where the
+	  symlink pointed to
+versions are now (overall checksum):
+	storeBackup.pl -V              => 186.1958
+	storeBackupls.pl -V            => 173.9472
+	storeBackupVersions.pl -V      => 174.1391
+	storeBackupRecover.pl -V       => 216.4308
+	storeBackupConvertBackup.pl -V => 178.6868
+	storeBackupDel.pl -V           => 185.7402
+	storeBackupMount.pl -V         => 172.4720
+	storeBackup_du.pl -V           =>  73.0682
+	llt -V                         => 107.5789
+	multitail.pl -V                => 118.2667
+
+
+	- changed max args for GNU/Linux to 64*1024 because of possible
+	  problems when using multibyte character sets
+
+----------------------------
+version 1.19.1	2005.10.08
+	storeBackup.pl
+	- reduced the lenght of the command line because of problems
+	  with dual byte characters
+	- all temporary file names now have a 64 bit random number
+	  all (randomly generated) file names are checked for existence
+	  before used
+
+----------------------------
+version 1.19.2  2005.11.13
+        storeBackup.pl
+	- when saving with --sourceDir / without using --includeDirs then
+	  storeBackup calculated useless md5sums
+
+----------------------------
+----------------------------
+version 2.0  2008.11.09
+        all programs:
+	- changed licence to gpl-3
+	- backup format is compatible to version 1.19,
+	  options *have changed*
+	- fixed several bugs
+	- introduction of lateLinks (this is the major change)
+	  - new options lateLinks, lateCompress
+	- new module for interpreting command line arguments and
+	  configuration file: a combination is now possible
+	- better support for files > 2GB on 64 bit operating systems
+	storeBackup.pl, storeBackupDel.pl:
+	- arguments in command line can overwrite configuration file
+	- new option keepRelative
+	- new option deleteNotFinishedDirs
+	storeBackup.pl:
+	- rewrite of core engine
+	- changed algorithm for linking with old backups
+	- directories specified with exceptDirs will now be created
+	  as empty directories
+	- new option ignorePerms
+	- new option cpIsGnu (support for special files)
+	- new option saveRAM (default is now to hold temp. DBs in RAM)
+	- removal of option exceptDirsSep
+	- renamed option withTime to suppressTime
+	- renamed option compressMD5File to doNotCompressMD5File
+	- exceptPattern has gone, now there is exceptRule (different syntax)
+	- includePattern has gone, now there is includeRule (different syntax)
+	- new option writeExcludeLog
+	- setting time on (absolute) symbolic link resulted in setting time
+	  in the original file -> corrected
+	storeBackupUpdateBackup.pl
+	- new program
+	- sets links asynchronously after running storeBackup with lateLinks
+	storeBackupSearch.pl
+	- new program
+	- allows searching in backups with a free definition depending on
+	  filename, size, uid, gid, ctime, mtime and file type
+
+----------------------------
+version 2.0.1  2008.12.14
+	storeBackupDel.pl:
+	- option keepLastOfWeek wasn't recognized when set in
+	  configuration file
+	storeBackup.pl:
+	- corrected wrong addition for statistical output of
+	  option progressReport
+
+----------------------------
+----------------------------
+version 3.0  2009.03.15
+	- support of ';' as comment sign in configuration files
+	  (additionally to '#' for better readability)
+	storeBackupCheckBackup.pl
+	- new program, checks consistency of a backup
+	storeBackupDel.pl:
+	- option keepLastOfWeek wasn't recognized when set in
+	  configuration file
+	storeBackup.pl:
+	- new options for saving files blocked:
+	  checkBlocksSuffix
+	  checkBlocksSuffixMinSize
+	  checkBlocksSuffixBS
+	  checkBlocksCompr
+	- new options for saving files blocked:
+	  checkBlocksRule (0-4)
+	  checkBlocksBS (0-4)
+	  checkBlocksCompr (0-4)
+	  checkBlocksRead (0-4)
+	- new options for saving devices blocked:
+	  checkDevices (0-4)
+	  checkDevicesDir (0-4)
+	  checkDevicesBS (0-4)
+	  checkDevicesCompr (0-4)
+	- new option to hard link symbolic links:
+	  linkSymlinks
+	- new option for defining which files to compress:
+	  comprRule
+
+----------------------------
+version 3.1  2009.05.24
+	storeBackup.pl
+	- storeBackup did not backup sockets, now it does
+	- for new files, the md5 sum is now calculated before *and*
+	  after copying / compressing for safety reasons. The file could
+	  have been changed during that time. So the md5 sum would not
+	  match the real one. A file with the firstly calculated
+	  md5 sum later could be hard linked to the changed file which
+	  means there is no backup of its content.
+	  If both md5 sums do not match, an warning is generated and
+	  the md5 sum is set to ggggg... which is a not possible value.
+	  This problem does not exist for blocked files in v3.0.
+	- improved statistic at the end of a run (sum of warnings
+	  and errors)
+	- added options checkBlocksParallel and checkDevicesParallel
+	- added option linkToRecent
+	- name clashes because of compressing files (eg. add .bz2)
+	  were not handeld corretly - bug was introduced in 3.0
+	  corrected
+	- when making a backup with source=/ while not using
+	  includeDirs then the md5 sums of all files were calculated
+	  also after the first backup
+	- corrected some issues with the statistical output
+	- option copyBWLimit is now deprecated because
+	  - of internal performance optimization
+	  - it is useless
+	- new option suppressWarning
+	storeBackupUpdateBackup.pl
+	- if sourceDir=/, for the very first backup with option
+	  lateLinks an empty 'linkFrom' file was generated which lead
+	  to (useless) error messages. corrected.
+	storeBackupCheckBackup.pl
+	- now also checks if files in the backup are not listed
+	  in .md5CheckSum
+	storeBackupRecover.pl
+	- the directories in the path to the restored files / directories
+	  were not set the original permissions, corrected
+	llt
+	- added option --epoch to calculate human readable dates from
+	  epoch based dates
+	man
+	- man pages for all programs (Thanks to Ryan Niebur)
+	all programs
+	- solved issues with single quotes in path and filenames
+
+----------------------------
+version 3.2  2009.07.18
+	storeBackup.pl
+	- new option --highLatency, useful on high latency lines
+	- corrected some typos in print statements to log files
+	- now also checks for size of files if files with two equal
+	  md5 sums are detected
+	- fixed a bug when using *block* options. storeBackup.pl stopped
+	  with an error message when blocked file was existing with same
+	  path, filename, contents and times in another series but did
+	  not exist in the own series of that backup.
+	- plus some very minor enhancements
+	all programs:
+	- if an option in a configuration file is set to nothing, the
+	  default value (if exists) is used
+
+----------------------------
+version 3.2.1 2012.02.12
+	storeBackup.pl
+	- replaced File::Copy by own function, because File::Copy did not
+	  handle strange filenames (eg. with \n) without warnings
+	- read .md5CheckSum.info with algorithm for configuration file
+	- changed comments for some options
+	- new parameter fileNameWithLineFeed to option suppressWarning:
+	  suppresses warning if a filename contains a line feed
+	- write logInBackupDirFileName into .md5CheckSum.info so it can
+	  be identified by storeBackupCheckBackup.pl
+	- deletition of old backups is now done before postcommand
+	- backup of a blocked file (or device) didn't store all md5sums
+	  for all blocks in the local .md5CheckSum file if two or more
+	  block in one blocked file were identical
+	  this means it is possible to restore the data with cat or bzcat,
+	  but *not* with storeBackupRecover.pl !
+	- statistics for storage of blocked files corrected
+	- avoided some (useless) perl warnings about undef'ed variables
+	- avoided some (useless) perl warnings about gotos (happens in
+	  new perl versions)
+	- if a file cannot be hard linked, storeBackup.pl makes a new
+	  copy of that file. The warning about that fact was shifted to
+	  debug output because it confused some users
+	- corrected some confusing code about combinations of compression,
+	  lateCompression and lateLinks
+	- solved several possible timing issues (reading of tmp-result files
+	- masking for file names with \n was missing when writing into
+	  lateLinks command file
+	- avoid possibility of division by zero when calculating time
+	  for run (percentage) in statistics
+	- corrected calculation of 'sum of target all' in statistics
+	- directories with \n in their name didn't get right time stamps
+	  in the backup; corrected
+	- permissions on directories with \n in their names were not set
+	  correctly
+	storeBackupls.pl
+	- in storeBackupls.pl option keepLastOfWeek, backupDir and series
+	  was ignored in the configuration file
+	- option -v didn't work properly
+	- workaround for timing issue when reading value for inodeBackup
+	storeBackupMount.pl
+	- corrected filering of output from mount command
+	- added 'rw', 'ro' feature to overwrite read only or read write
+	  from /etc/fstab
+	storeBackupCheckBackup.pl
+	- read .md5CheckSum.info with algorithm for configuration file
+	- add option includeRenamedBackups
+	- changed option -b to -c (for compatibility to storeBackupRecover.pl
+	- many error corrections (mostly written new)
+	storeBackupRecover.pl
+	- read .md5CheckSum.info with algorithm for configuration file
+	- backup of a directory / file starting with '.' didn't work
+	- recovery of blocked files did not work in special cases
+	  (depending on size of the blocks and compression flag)
+	- permissions on directories were not restored because if wrong
+	  order - they are now set after restoring all files
+	- optimized performance (bigger block size for restoring blocked files)
+	- mtime of restored files was not set to original values because
+	  of wrong order of setting permissions (corrected)
+	storeBackupUpdateBackup.pl
+	- replaced File::Copy by own function, because File::Copy did not
+	  handle strange filenames (eg. with \n) without warnings
+	- read .md5CheckSum.info with algorithm for configuration file
+	- corrected line number when reporting problems with command file
+	  (.storeBackupLinks/linkFile.bz2)
+	- directories didn't get right time stamps when restoring; corrected
+	storeBackupVersions.pl
+	- read .md5CheckSum.info with algorithm for configuration file
+
+----------------------------
+version 3.3 2012.09
+	general
+	- command line option --unset now also works with list parameters
+	  set in configuration files
+	  (you can use eg. --unset otherBackupSeries with storeBackup.pl)
+	storeBackup.pl
+	- when saving blocked files or devices with a block size smaller
+	  than 1M, then always bzip2 is used as compression algorithm -
+	  doesn't matter if you eg. had chosen gzip2. In the backup, the
+	  suffix was eg. .gz, but compression algorithm was bzip2.
+	  storeBackupRecover cannot restore these backups correctly!
+	  Please restore with eg. zcat manually
+	- added rule-function COMPRESS_CHECK
+	- changed option checkDevicesCompr<n> from switch to option with
+	  parameter. Possible values are yes, no, check
+	- added option comprSuffix (now there exists a white list and a
+	  black list to decide if a file should be compressed or not;
+	  the rest of the files is rated by COMPRESS_CHECK)
+	- added option checkBlocksParallel (similar functionality
+	  as eg. checkBlocksParallel0)
+	- use DB_File now done in eval. This means, that there is now
+	  error message any more if this extension is not available
+	  -> should solve problems with several NAS boxes
+	- ignore option 'mergeBackupDir' used by new program
+	  storeBackupMergeIsolatedBackup.pl
+	- added statistical output 'COMPR_CHECK' for blocked files
+	- added keys to option 'suppressWarning':
+	  use_DB_File, use_IOCompressBzip2
+	- option 'ignoreReadError' didn't work - read errors on
+	  directories always were shown as WARNING only; fixed
+	- add some default suffixes to exceptSuffix
+	storeBackup.pl + storeBackupCheckBackup.pl
+	- storeBackup.pl didn't store correct pathname in .md5CheckSum when
+	  saving blocked devices, therefore storeBackupCheckBackup.pl couldn't
+	  check those files
+	- storeBackupCheckBackup.pl needed small enhancement to be able
+	  to read correct pathname generated from storeBackup.pl for
+	  blocked devices
+	storeBackup.pl + storeBackupUpdateBackup.pl
+	- fixed bug: backup with block + lateLinks; 1st backup complete;
+	  2nd backup with *no* changes to blocked file; 3rd backup with
+	  changes to blocked file (all without UpdateBackup between 1st,
+	  2nd and 3rd run) -> in 3rd run no blocks were linked to
+	  existing one
+	- added option --autorepair (-a) to storeBackup.pl
+	- fixed bug: storeBackupUpdateBackup.pl now can handle combination
+	  of lateLinks and not finished backups
+	storeBackup.pl + storeBackupDel.pl (+ all others reading config files)
+	- can now read compressed configuration files
+	  (recognizing suffix .bz2 and .gz)
+	storeBackupUpdateBackup.pl
+	- added support for replication, new options:
+	  --copyBackupOnly, --dontCopyBackup, --archiveDurationCopyStation,
+	  --dontDelInCopyStation, --genBackupBaseTreeConf,
+	  --genCopyStationConf
+	storeBackupMount.pl
+	- Debian (and Ubuntu) changes all executables to a name without
+	  the suffix '.pl'. storeBackupMount.pl now looks for
+	  storeBackup.pl _and_ storeBackup
+	storeBackupCheckBackup.pl
+	- corrected help text / man page
+	- added log file management
+	storeBackupDel.pl
+	- added 'BEGIN' and 'END' to log files for better support
+	  through NAGIOS plugin
+	- --plusLogStdout didn't work
+	storeBackupSetupIsolatedMode.pl
+	- new program
+	storeBackupMergeIsolatedBackup.pl
+	- new program
+	storeBackupReplicationWizard.pl
+	- new program
+	linkToDirs.pl
+	- new program
+	storeBackupCheckSource.pl
+	- new program
+
+----------------------------
+version 3.3.1 2013.04
+	linkToDirs.pl
+	- added option --saveRAM and --tmpdir
+	- option --ignoreErrors
+
+	storeBackup.pl
+	- removed generation and reading of file backupDir/.md5BlockCheckSum
+	  This redundant information is not necessary any more
+	- blocked files: permissons and owner/group were not set to root (if
+	  backup ran by root) and not to the real owner/group/permissions
+	- option --saveLogs was always switched on
+	- Storing of blocked files didn't work if an existing block had to
+	  be hard linked when the number of possible hard links was reached.
+	  (In reality, this happened esp. with big sparse files.) corrected
+	- added parameter noBackupForPeriod to option suppressWarning
+	  (thanks to Oliver Okrongli)
+	- added option --checkCompr / -C  (command line only)
+	- didn't work when path to storeBackup.pl contained a blank
+	  (this bug could have been present in other programs also -
+	  correted in lib)
+
+	storeBackupCheckBackup.pl
+	- also check md5 sum entries in case of already checked files
+	  which are there for hard links only
+	- added enhanced logging like in storeBackup.pl
+	- added option --wrongFileTables
+	- at the end, more errors than happen where summarizing
+	- added option --lastOfEachSeries
+
+	storeBackupMount.pl
+	- newly written. Now allows usage of more programs than
+	  storeBackup.pl only
+
+	storeBackupUpdateBackup.pl
+	- better error correction (option --autorepair)
+	- added enhanced logging like in storeBackup.pl
+	- changed useless error message to info
+	  (repair of 'link from' reference from not replicated series)
+	- blocked files: permissons and owner/group were not set to root (if
+	  backup ran by root) and not to the real owner/group/permissions
+	- added missing function 'cleanup'
+	- compression now runs natively without calling external program bzip2
+	  if possible (bzip2 used + module IO::Compress::Bzip2 available)
+	- changed 'cp -v' to 'cp -a' when copying delta cache information for
+	  replication. This allows replication on eg. samba shares
+
+	storeBackupCheckSource.pl
+	- added enhanced logging like in storeBackup.pl
+
+	storeBackupSetupIsolatedMode.pl
+	- added option --explicitBackup
+
+	dateTools.pl
+	- corrected wrong calculation in dateTools::sub
+	  this affected storeBackupUpdateBackup deletion of old replicas in
+	  deltaCache for intraday timeframes (not important)
+
+----------------------------
+version 3.4 2013.07
+	storeBackup.pl
+	- added rule functions MARK_DIR and MARK_DIR_REC
+	- added options --specialTypeArchiver and --archiveTypes
+
+	storeBackupRecover.pl
+	- now able to restore special files stored with option --archiveTypes
+	- do not overwrite special files any more if --overwrite is not set
+
+	storeBackupCheckBackup.pl
+	- now able to check backup when special files stored with option
+	  --archiveTypes
+
+	storeBackupSetupIsolatedMode.pl
+	- when using option --configFile, you can now use an already by this
+	  progrem generated configuration file to copy the metadata of the last
+	  backup (like in the past) again.
+
+	linkToDirs.pl
+	- if flag --ignoreErrors is set, also ignore if directories already
+	  exist
+
+	storeBackupRecover.pl
+	- errors from programs (eg. bzip2, cp) writing data from backup were
+	  not evaluated
+
+	lib/stbuMd5Exec.pl
+	- error messages in called compression program are now transported
+	  to log files
+	- missing waitpid inserted
+
+----------------------------
+version 3.4.1 2013.09
+	storeBackup.pl
+	- rule functions MARK_DIR, MARK_DIR_REC now work with option saveRAM
+	- added parameter use_MLDBM to option suppressWarning
+	- added error message when running out of disk space by copying
+	  small files (100k)
+	- when excluding a non-readable directory with exceptDirs no
+	  warning or error message is generated any more
+	  (before this correction it was necessary to set ignoreReadError)
+	- lockFile is deleted if control-c was pressed
+
+	storeBackupCheckBackup.pl
+	- added missing entry in file list with wrong md5 sums (option -w)
+
+	storeBackupRecover.pl
+	- fixed bug: called non-existing method getSTDERR on class simpleFork
+
+	documentation
+	- new chapter "internals"
+
+----------------------------
+version 3.4.2 2013.09
+	storeBackup.pl
+	- fixed bug when reading output files of external programs
+	  (heuristical bug)
+	- option --progressReport now accepts additionaly a time frame
+
+	storeBackupUpdateBackup.pl
+	- option --debug now works like -d (typo)
+
+	storeBackupRecover.pl
+	- new option --createSparseFiles
+
+	linkToDirs.pl
+	- new options --createSparseFiles and --blockSize
+
+----------------------------
+version 3.4.3 2013.11
+	in library for (mostly) all programs
+	- in ubuntu, starting a program with sudo means $PWD is not set
+	  changed subroutine absolutePath to avoid issues
+
+	multiTail.pl
+	- changed program name from multitail.pl to multiTail.pl
+	  to avoid conflicts with other program called multitail
+	- added options --print, --color, --grep
+
+	storeBackup.pl
+	- changed behavior in case of (non-critical) error messages
+	  file .storeBackupLinks/linkFrom is written even in case of errors
+	- speedup through caching of already created directories in backup
+	  when using --lateLinks -> reduced checking if directory already
+	  exist on high latency remote line
+	- sometimes, identical blocks in blocked files were copied instead
+	  of hard linked (problem with parallelisms)
+
+	linkToDirs.pl
+	- added some error messages in case of not beeing able to read files
+	  (and therefore to calculate md5 sums)
+	- option --progressReport now accepts additionaly a time frame
+	- added option --printDepth
+
+----------------------------
+version 3.5
+	all storeBackup*.pl programs
+	- depend on file .md5CheckSum.Finished
+
+	storeBackupUpdateBackup.pl
+	- for replication: added support for wildcards in series names
+	  and option --createNewSeries (-C)
+	- added option --noWarningDiffSeriesInBackupCopy (-N)
+
+	linkToDirs.pl
+	- /tmp (partly) was used for temp. files instead of using $TMPDIR or
+	  special option
+	- changed the file ownership and permissions of files being pointed
+	at by symlinks, instead of the symlink itself / corrected
+
+	storeBackupCheckBackup.pl
+	- added option --tmpdir
+
+	storeBackupMergeIsolatedBackup.pl
+	- added option --tmpdir
+
+	storeBackupSetupIsolatedMode.pl
+	- added option --force
+
+	storeBackupMount.pl
+	- added option --tmpdir
+	- added options --suppressTime, --maxFilelen, --noOfOldFiles,
+	--saveLogs, --compressWith
+
+	storeBackup.pl
+	- /tmp (partly) was used for temp. files instead of using $TMPDIR or
+	  special option
+	- instead series names, now wildcards are also accepted
+	  (option otherBackupSeries)
+	- option cpIsGnu is set automatically if Linux system is recognized
+	- ERROR message "no permissions to read ..." does not enforce an exit
+	  of storeBackup.pl any more
+	- added option stayInFileSystem
+
+	storeBackupRecover.pl
+	- /tmp (partly) was used for temp. files instead of using $TMPDIR or
+	  special option
+	- library DB_File (better performance) is not a must any more
+	  necessarry to support some NAS boxes without additional tweaks
+
+	storeBackupReplicationWizard.pl
+	- /tmp (partly) was used for temp. files instead of using $TMPDIR or
+	  special option
+
+	storeBackupSearch.pl
+	- added option --tmpdir
+
+	storeBackupUpdateBackup.pl
+	- added option --tmpdir
+
+	multiTail.pl
+	- changed option --noOldFiles to --noOfOldFiles
+	  for better compatibility with other programs

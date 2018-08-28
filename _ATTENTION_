@@ -1,0 +1,40 @@
+!!! INCOMPATIBILIY !!!
+
+If you have backup trees prior to packaged version 1.15, you have to convert
+your old backup directories to a newer format.
+
+This can easily be done with the script:
+
+storeBackupConvertBackup.pl  storeBackup-dir
+
+storeBackup-dir is the directory in which you have all your backups:
+
+
+EXAMPLE:
+If you get:
+) ls /home/copyshop/lappix-backup/      
+2002.04.15_12.24.05  2002.05.08_09.17.25  2002.05.22_07.02.46
+2002.04.16_17.35.46  2002.05.13_17.14.26  2002.05.22_07.33.35
+2002.04.17_15.21.48  2002.05.14_17.36.05  2002.05.22_07.38.14
+2002.04.23_17.55.30  2002.05.15_17.32.52  2002.05.22_07.40.24
+2002.04.24_10.54.47  2002.05.16_13.56.46  2002.05.22_08.06.16
+2002.04.25_14.25.54  2002.05.21_11.21.19  2002.05.22_08.08.12
+2002.05.06_15.38.44  2002.05.21_16.52.11  2002.05.22_15.44.01
+2002.05.07_17.50.42  2002.05.21_17.06.35
+
+then /home/copyshop/lappix-backup is your storeBackup-dir
+
+
+
+
+version 1.15 and newer allow the restauration of access and
+modification times in the target directory of
+storeBackupRecover.pl. For this functionality, additional information
+must be present in the internal file .md5CheckSum (new format). The
+conversion program will add these informations in a way, that the
+access time is set to the modivication time for older backups than
+version 1.15.
+
+All backups with storeBackup.pl from version 1.15 and higher can restore
+atime and mtime with storeBackupRecover.pl to the former value in the
+backup source directory.

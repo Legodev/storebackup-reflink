@@ -1,0 +1,89 @@
+Copyright (c) 2002-2013 by Heinz-Josef Claes
+Published under the GNU General Public License v3 or any later version
+
+Documentation is delivered as pdf in the 'doc' directory of the tar file.
+The same documentation is available at:
+
+http://savannah.nongnu.org/projects/storebackup
+
+New releases are announced at
+http://freshmeat.net/projects/storebackup
+http://freecode.com/projects/storebackup
+
+
+--------------------------------------------------------
+For the changes see ChangLog.
+
+This release (2.0) has some substantial changes. For a very short description,
+read the ChangeLog.
+
+To make a simple Backup, do the following:
+unpack the tar file, mkdir a directory for the backup, eg. /my-backups,
+which should be a different disk than /etc.
+
+Then start as root:
+
+# <path>/storeBackup.pl --sourceDir /etc --backupDir /my-backups --series .
+
+--sourceDir  the directory you wish to backup
+--backupDir  The directory that is the basis for all your backups.
+	     This can not be / (e.g. /my-backups)
+--series     the directory of this specific backup inside of the
+	     'topLevel' directory. e.g. personal will make the backup to
+	     be in /my-backups/personal if topeLevel is /my-backups.
+ 	     If this is not needed, use a '.' (dot)
+	     The default value is 'default'.
+
+The above command will backup '/etc' to '/my-backups/.'
+It will take a while, because it is the first backup and some files have
+to be compressed.  If you look into '/my-backups/.', you will see all the
+files from '/etc' there - but compressed in a directory named after the
+date and time.
+
+You can also start it as a 'normal' user, but then you can only save files
+you are allowed to read (not /etc) to place where you have write access.
+
+Repeat the command above.
+This backups runs much faster. When you look into one of the backups with
+# ls -l
+you will see eg:
+-rw-r--r--   2 root root   890 Jun  4 17:53 hosts.bz2
+             ^                                     ^
+     it is hard linked                      it is compressed
+This means, that this (compressed file) exists only one time on your disk,
+but is present in both backups.
+
+
+You can use version 2.0 with no limitations together with your existing
+backups from version 1.19. But after switching to 2.0, you should not use
+1.19 any more if used the option 'lateLinks'!
+
+StoreBackup is a piece of software with powerfull options for the configuration.
+For additional information, there is a pdf documentation which you should read
+;-) .
+
+---
+Some more explanations to --backupDir and --series.
+
+Think you make backups from 3 different computers to a (nfs) server.
+You backup directory on the server is:
+/my-backups
+
+The you create three different directories for the backups of you
+computers below this directory (one for each computer):
+/my-backups/computer1
+/my-backups/computer2
+/my-backups/computer3
+
+Now assume, that the backups are mounted with the same names on your
+three computers.
+If you make a backup from computer 1, you will configure:
+... --backupDir /my-backups --series computer1
+
+If you make a backup from computer 2, you will configure:
+... --backupDir /my-backups --series computer2
+
+and so on. The parameter to backupDir shows the place, where all your
+backups reside, series describes where at this place the individual
+backup series are located.
+

@@ -1,0 +1,334 @@
+#! /usr/bin/env perl
+
+#
+#   Copyright (C) Heinz-Josef Claes (2000-2013)
+#                 hjclaes@web.de
+#   
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+push @VERSION, '$Id: llt 362 2012-01-28 22:11:13Z hjc $ ';
+
+
+use strict;
+
+sub libPath
+{
+    my $file = shift;
+
+    my $dir;
+
+    # Falls Datei selbst ein symlink ist, solange folgen, bis aufgelöst
+    if (-f $file)
+    {
+	while (-l $file)
+	{
+	    my $link = readlink($file);
+
+	    if (substr($link, 0, 1) ne "/")
+	    {
+		$file =~ s/[^\/]+$/$link/;
+	    }
+	    else
+	    {
+		$file = $link;
+	    }
+	}
+
+	($dir, $file) = &splitFileDir($file);
+	$file = "/$file";
+    }
+    else
+    {
+	print STDERR "<$file> does not exist!\n";
+	exit 1;
+    }
+
+    $dir .= "/../lib";           # Pfad zu den Bibliotheken
+    my $oldDir = `/bin/pwd`;
+    chomp $oldDir;
+    if (chdir $dir)
+    {
+	my $absDir = `/bin/pwd`;
+	chop $absDir;
+	chdir $oldDir;
+
+	return (&splitFileDir("$absDir$file"));
+    }
+    else
+    {
+	print STDERR "<$dir> does not exist, exiting\n";
+    }
+}
+sub splitFileDir
+{
+    my $name = shift;
+
+    return ('.', $name) unless ($name =~/\//);    # nur einfacher Dateiname
+
+    my ($dir, $file) = $name =~ /^(.*)\/(.*)$/s;
+    $dir = '/' if ($dir eq '');                   # gilt, falls z.B. /filename
+    return ($dir, $file);
+}
+my ($req, $prog) = &libPath($0);
+push @INC, "$req";
+
+require 'checkParam2.pl';
+require 'version.pl';
+require 'fileDir.pl';
+
+=head1 NAME
+
+llt - list create, access and modification times of files
+
+=head1 SYNOPSIS
+
+	llt [-r] [-i] [-a|-m|-c] [files] [dirs]
+or
+        llt -e time
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<--help>, B<-h>
+
+    show this help
+
+=item B<--reverse>, B<-r>
+
+    sort in reverse order
+
+=item B<--insensitive>, B<-i>
+
+    case insensitively (not with -a, -m or -c)
+
+=item B<--access>, B<-a>
+
+    sort according to access time
+
+=item B<--modification>, B<-m>
+
+    sort according to modification time
+
+=item B<--creation>, B<-c>
+
+    sort according to creation time
+
+=item B<--unixTime>, B<-u>
+
+    show unix time (unsigned integer)
+
+=item B<-V>
+
+    print version(s)
+
+=item B<--epoch>, B<-e>
+
+    parameter is the time since epoch
+    llt print the date in a readable format
+    this option can be repeated multiple times
+    llt will stop executing if no other options or params are choosen
+
+=back
+
+Sorting without [-a|-m|-c] is sorting according to file names.
+
+=head1 COPYRIGHT
+
+Copyright (c) 2000-2014 by Heinz-Josef Claes (see README).
+Published under the GNU General Public License v3 or any later version.
+
+=cut
+
+my $Help = &::getPod2Text($0);
+
+&printVersion(\@ARGV, '-V', '--version');
+
+my $CheckPar =
+    CheckParam->new(
+		    '-allowLists' => 'yes',
+		    '-list' => [
+				Option->new('-name' => 'insensitive',
+					    '-cl_option' => '-i',
+					    '-cl_alias' => '--insensitive',
+					    '-only_if' =>
+		    'not [access] and not [modification] and not [creation]'
+					    ),
+				Option->new('-name' => 'access',
+					    '-cl_option' => '-a',
+					    '-cl_alias' => '--access',
+					    '-only_if' =>
+		    'not [modification] and not [creation]'
+					    ),
+				Option->new('-name' => 'modification',
+					    '-cl_option' => '-m',
+					    '-cl_alias' => '--modification',
+					    '-only_if' =>
+		    'not [access] and not [creation]'
+					    ),
+				Option->new('-name' => 'creation',
+					    '-cl_option' => '-c',
+					    '-cl_alias' => '--creation',
+					    '-only_if' =>
+		    'not [access] and not [modification]'
+					    ),
+				Option->new('-name' => 'reverse',
+					    '-cl_option' => '-r',
+					    '-cl_alias' => '--reverse'
+					    ),
+				Option->new('-name' => 'unixTime',
+					    '-cl_option' => '-u',
+					    '-cl_alias' => '--unixTime'),
+				Option->new('-name' => 'epoch',
+					    '-cl_option' => '-e',
+					    '-cl_alias' => '--epoch',
+					    '-multiple' => 'yes'),
+				Option->new('-name' => 'help',
+					    '-cl_option' => '-h',
+					    '-cl_alias' => '--help'
+					    ),
+				]
+		    );
+
+$CheckPar->check('-argv' => \@ARGV,
+		 '-help' => $Help
+		 );
+
+if ($CheckPar->getOptWithoutPar('help'))
+{
+    print "$Help";
+    exit 0;
+}
+
+my $sort = 'name';      # Default: Alphabetisch sortieren
+$sort = 'atime' if ($CheckPar->getOptWithoutPar('access'));
+$sort = 'mtime' if ($CheckPar->getOptWithoutPar('modification'));
+$sort = 'ctime' if ($CheckPar->getOptWithoutPar('creation'));
+my $reverse = 1 if ($CheckPar->getOptWithoutPar('reverse'));
+my $insensitive = 1 if ($CheckPar->getOptWithoutPar('insensitive'));
+my $unixTime = $CheckPar->getOptWithoutPar('unixTime');
+my $epoch = $CheckPar->getOptWithPar('epoch');
+
+my (@all) = ($CheckPar->getListPar());
+
+
+if ($epoch)
+{
+    my ($ep);
+    foreach $ep (@$epoch)
+    {
+	print "$ep -> ", &getTime($ep), "\n";
+    }
+    exit 0 unless @all;
+}
+
+(@all) = ('.') unless @all;
+
+my (@files);
+my $f;
+foreach $f (@all)
+{
+    if (-d $f)    # wenn Directory
+    {
+	opendir(DIR, $f) or print STDERR "cannot open <$f>\n";
+	my $f1;
+	foreach $f1 (readdir(DIR))
+	{
+	    push @files, "$f/$f1";
+	}
+	closedir(DIR);
+    }
+    else          # Datei
+    {
+	if (-f $f)
+	{
+	    push @files, $f;
+	}
+	else
+	{
+	    print "Cannot open file <$f>\n";
+	}
+    }
+}
+
+# Ermitteln der Zeiten
+my (@f);
+foreach $f (@files)
+{
+    my ($atime, $mtime, $ctime) = (lstat($f))[8,9,10];
+    my %h = ('name' => $f,
+	     'atime' => $atime,
+	     'mtime' => $mtime,
+	     'ctime' => $ctime
+	     );
+    push @f, \%h;
+}
+
+# Sortieren
+my (@sf);
+if ($sort eq 'name')
+{
+    if ($insensitive)
+    {
+	@sf = $reverse ? sort { uc($b->{$sort}) cmp uc($a->{$sort}) } @f
+	    : sort { uc($a->{$sort}) cmp uc($b->{$sort}) } @f;
+    }
+    else
+    {
+	@sf = $reverse ? sort { $b->{$sort} cmp $a->{$sort} } @f
+	    : sort { $a->{$sort} cmp $b->{$sort} } @f;
+    }
+}
+else
+{
+    @sf = $reverse ?
+	sort { $b->{$sort} <=> $a->{$sort} } @f :
+	sort { $a->{$sort} <=> $b->{$sort} } @f;
+}
+
+# Ausgabe
+my $len = $unixTime ? 11 : 19;
+printf "%-${len}s  %-${len}s  %-${len}s  [Time]\n", "access",
+    "modification", "creation";
+foreach $f (@sf)
+{
+    my $t;
+    foreach $t ($f->{'atime'}, $f->{'mtime'}, $f->{'ctime'})
+    {
+	if ($unixTime)
+	{
+	    print "$t   ",
+	}
+	else
+	{
+	    print &getTime($t), "  ";
+	}
+    }
+    print $f->{'name'}, "\n";
+}
+
+exit 0;
+
+
+sub getTime
+{
+    my $t = shift;
+
+    my ($sec,$min,$hour,$mday,$mon,$year) = localtime($t);
+    return sprintf("%4d.%02d.%02d %02d:%02d:%02d",
+		   $year+1900, $mon+1, $mday,
+		   $hour, $min, $sec);
+}
+
